@@ -212,6 +212,12 @@ needs_confirmation、未確認の変更指示、勤務回数差、対象者誤�
 すべて解決し明示承認済みの場合のみJSONコードブロック1つで出力。既存JSONの構造を変えない：ルートにはappVersion（"2.0"）、documentType（"commute_slip"）、targetMonth、submissionDate、companyName、people。entriesはルートではなく各people要素の中に置く。
 people要素：id、name、employeeCode（文字列で先頭0を保持）、address、nearestStations（配列）、hankoName、showDigitalHanko、hankoScale、notes、entries。
 entries要素：date、workType、clientName、siteName、siteAddress、nearestStation、route、transport、oneWayFare、roundTripFare、fareType、verificationUrl、memo。新しい必須フィールドを追加しない。金額は数値、原則IC往復、月・氏名・コード・合計を再計算。重要でない未使用任意項目だけ空文字／null可。excludedは請求entriesに含めず別の確認記録へ残す。
+【各項目の記載内容】
+routeは駅名・停留所・現場などの通勤区間だけを簡潔に記載する。往復は「↔」で表現してよいが、「同経路を標準復路として計算」などの説明文を追加しない。
+transportはJR・地下鉄・路線バスなど、承認済み経路で実際に採用した公共交通手段を記載する。当日の実際の車利用へ置き換えない。
+oneWayFare／roundTripFare／fareTypeは承認済みの運賃・運賃種別を正確に保持する。印刷用の「IC 440円×2」等はサイトが自動生成するため、routeやtransportに書き込まない。
+siteNameは現場名だけを記載する。往復計算の説明・経路選定理由・証拠などは必要に応じてmemoへ記載し、route・transport・siteNameへ混ぜない。
+workTypeはイベント勤務でも、承認済みの勤務実態に対応するサイトで認識できる「日勤」「夜勤」「研修」等の区分を使用し、「イベント」だけを勤務区分にしない。イベントの詳細はsiteName・memoに残す。勤務区分が未確認なら推測で決めない。
 回数に合わせて勤務を補わない。勤務先は住所だけでなく会社名・現場名を優先。実データを公開用サンプルへ転用しない。`;
   }
   return { countValue, labelFor, assessInstructionChain, reviewFor, serviceDate, reconcileWorkCounts, releaseBlockers, buildPromptA, buildPromptB };
