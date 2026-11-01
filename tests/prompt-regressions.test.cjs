@@ -154,13 +154,13 @@ test("confirmed work and fare-pending are separate; final output still waits for
 
 test("door-to-door prompt includes reasonable bus/walk tradeoffs, not cheapest-only or inflated fares", () => {
   const prompt = Core.buildPromptA(state());
-  assert.match(prompt, /自宅→自宅最寄り駅は徒歩/);
+  assert.match(prompt, /自宅近くの実用的なバス停→大宮駅/);
   assert.match(prompt, /電車＋必要な場合はバス＋徒歩/);
   assert.match(prompt, /交通費の最大化も最小化も目的にしない/);
   assert.match(prompt, /長い徒歩・駅間徒歩が少ない/);
   assert.match(prompt, /乗換回数が少ない/);
   assert.match(prompt, /現場に近い実用的な駅・バス停/);
-  assert.match(prompt, /徒歩15分以上程度で通常のバス利用が合理的ならバス/);
+  assert.match(prompt, /徒歩約10分以上なら、通常運行する合理的なバス/);
   assert.match(prompt, /短距離徒歩へ金額を増やすためだけのバスを追加しない/);
   assert.match(prompt, /検索リンクだけで運賃確認済みにせず/);
   assert.match(prompt, /適用日・実在路線・停留所・運賃の根拠/);

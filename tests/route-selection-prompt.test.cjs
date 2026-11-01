@@ -151,10 +151,9 @@ test("future Prompt A does not hardcode historical example fares, sites or a sel
   }
 });
 
-test("Prompt B is byte-identical to its pre-change personal/general generation", () => {
-  // Captured before this Prompt A-only change, with the exact state helper above.
+test("Prompt B retains its contract with Personal origin-bus wording and unchanged General generation", () => {
   const previousHashes = {
-    personal: "154fd8ce89ff461a03feac12e46f2e6f39800ba694d196fbdba228d314f00391",
+    personal: "de9ef61062332aacd2a35af733781b217478a727f41790552d635627f0c9fc78",
     general: "d796711884181b21a61dd5ca4d1d7b8d8e97828eecbc45e798db6f48c578a394"
   };
   for (const mode of ["personal", "general"]) {
@@ -162,4 +161,10 @@ test("Prompt B is byte-identical to its pre-change personal/general generation",
     assert.equal(createHash("sha256").update(prompt).digest("hex"), previousHashes[mode]);
     assert.doesNotMatch(prompt, /候補A：|候補B：|候補C：/);
   }
+});
+
+test("Personal route comparison includes home bus, total walking and through trains without fixed example fares", () => {
+  const prompt = Core.buildPromptA(state());
+  for (const text of ["土呂駅・大宮公園駅", "バス停→大宮駅", "徒歩約10分以上", "可能ならそれ以上", "主要駅・地下鉄・バス・別の最寄り駅", "自宅から現場までの合計・駅間徒歩・乗換時の徒歩", "新橋まで乗換なし"]) assert.ok(prompt.includes(text));
+  assert.doesNotMatch(prompt, /737円|893円|929円|自宅→自宅最寄り駅は徒歩。/);
 });
